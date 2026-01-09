@@ -87,10 +87,21 @@ def main():
     plt.tight_layout()
     plt.savefig(fig_path, dpi=160)
 
+    # Plot: stockout probability vs order_up_to
+    fig2_path = run_dir / "stockout_prob_vs_order_up_to.png"
+    plt.figure()
+    plt.plot(df_sorted["candidate_order_up_to"], df_sorted["stockout_probability"], marker="o")
+    plt.xlabel("Order-up-to (units)")
+    plt.ylabel("stockout_probability")
+    plt.title("Policy sweep: stockout probability vs order-up-to")
+    plt.tight_layout()
+    plt.savefig(fig2_path, dpi=160)
+
     print("\nSaved:")
     print(" -", csv_path)
     print(" -", meta_path)
     print(" -", fig_path)
+    print(" -", fig2_path)
 
 
 if __name__ == "__main__":
