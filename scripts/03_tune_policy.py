@@ -99,11 +99,32 @@ def main():
     plt.tight_layout()
     plt.savefig(fig2_path, dpi=160)
 
+    # Plot: Pareto-style view (cost vs service level)
+    pareto_path = run_dir / "pareto_cost_vs_service.png"
+    plt.figure()
+    plt.scatter(df["service_level_fill_rate"], df[objective])
+
+    # label best and its nearest neighbors by order_up_to
+    df2 = df.sort_values(objective).head(8)
+    for _, row in df2.iterrows():
+        plt.annotate(
+            f"OU={int(row['candidate_order_up_to'])}",
+            (row["service_level_fill_rate"], row[objective]),
+            fontsize=8,
+        )
+
+    plt.xlabel("service_level_fill_rate")
+    plt.ylabel(objective)
+    plt.title("Tradeoff: cost vs service level")
+    plt.tight_layout()
+    plt.savefig(pareto_path, dpi=160)
+
     print("\nSaved:")
     print(" -", csv_path)
     print(" -", meta_path)
     print(" -", fig_path)
     print(" -", fig2_path)
+    print(" -", pareto_path)
 
 
 if __name__ == "__main__":
