@@ -16,6 +16,8 @@ dependencies = [
   "torch",
   "numpy",
   "pandas",
+  "streamlit",
+  "matplotlib",
 ]
 
 [tool.setuptools.packages.find]
