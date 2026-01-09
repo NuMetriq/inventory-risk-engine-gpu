@@ -13,15 +13,17 @@ def main():
     device = get_device()
 
     # --- Config for this run ---
-    params = SimParams(n_paths=30_000, horizon_days=30, seed=42)
+    params = SimParams(n_paths=30_000, horizon_days=60, seed=42)
     base_policy = Policy(review_every_days=7, order_up_to=250)
 
-    demand = DemandModel(mean_daily=8.0, std_daily=3.0)
-    lead_time = LeadTimeModel(mean_days=5.0, std_days=1.0, min_days=1, max_days=21)
+    demand = DemandModel(mean_daily=10.0, std_daily=7.0)
+    lead_time = LeadTimeModel(mean_days=9.0, std_days=4.0, min_days=1, max_days=30)
 
-    grid = np.arange(150, 451, 25)  # 150..450
+    coarse = np.arange(50, 651, 50)    # broad sweep
+    fine = np.arange(200, 451, 10)    # zoom where we expect the optimum
+    grid = np.unique(np.concatenate([coarse, fine]))
     objective = "expected_total_cost"
-    service_level_min = 0.95
+    service_level_min = None
 
     # --- Run ---
     results = tune_order_up_to(
@@ -29,10 +31,10 @@ def main():
         base_policy=base_policy,
         demand=demand,
         lead_time=lead_time,
-        initial_on_hand=200,
+        initial_on_hand=80,
         unit_cost=10.0,
-        holding_cost_per_unit_day=0.02,
-        stockout_penalty_per_unit=5.0,
+        holding_cost_per_unit_day=0.05,
+        stockout_penalty_per_unit=100.0,
         order_up_to_grid=grid,
         objective=objective,
         constraint_service_level_min=service_level_min,
