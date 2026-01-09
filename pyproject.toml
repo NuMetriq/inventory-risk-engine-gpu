@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "numetriq-inventory-risk-engine"
+version = "0.1.0"
+description = "GPU-accelerated demand uncertainty and inventory risk simulation engine"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "NuMetriq LLC" }
+]
+
+dependencies = [
+  "torch",
+  "numpy",
+  "pandas",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
